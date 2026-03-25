@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "MeetingMind",
+  "version": "1.0",
+  "description": "Real-time Google Meet transcription & AI summarisation using a self-hosted fine-tuned BART model. No external LLMs.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://meet.google.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup/dist/index.html",
+    "default_title": "MeetingMind Summariser"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
