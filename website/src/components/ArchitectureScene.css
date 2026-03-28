@@ -1,0 +1,42 @@
+.arch {
+  background: linear-gradient(to bottom, transparent, rgba(187,134,252,0.04), transparent);
+}
+.arch__canvas-wrapper {
+  height: 520px;
+  position: relative;
+  margin: 16px 0;
+}
+.arch__hint {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  background: var(--glass);
+  padding: 6px 14px;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  white-space: nowrap;
+}
+.arch__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 24px;
+}
+.arch__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
