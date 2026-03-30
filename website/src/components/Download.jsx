@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import './Download.css';
 const STEPS = [
-  { label: 'Clone the repo', code: 'git clone https:
+  { label: 'Clone the repo', code: 'git clone https://github.com/Dhanvin1520/meetingmind-ai.git' },
   { label: 'Build the popup', code: 'cd extension/popup && npm install && npm run build' },
-  { label: 'Open Chrome extensions', code: 'chrome:
+  { label: 'Open Chrome extensions', code: 'chrome://extensions/' },
   { label: 'Load the extension', code: 'Click "Load unpacked" → Select meetingmind/extension/' },
 ];
 export default function Download() {
@@ -15,12 +15,10 @@ export default function Download() {
   };
   return (
     <section className="section download" id="download">
-      {}
-      <div className="download__glow" />
       <div className="container">
         <div className="section-center">
-          <div className="section-label">⬇ Free & Open Source</div>
-          <h2 className="section-title">Get <span className="gradient-text">MeetingMind</span> in 4 steps.</h2>
+          <div className="section-label">Free & Open Source</div>
+          <h2 className="section-title">Get MeetingMind in 4 steps.</h2>
           <p className="section-sub">No account. No subscription. No data leaving your infrastructure. Just a better meeting experience.</p>
         </div>
         <div className="download__layout">
@@ -47,7 +45,7 @@ export default function Download() {
             <h3>Ready to transform<br/>your meetings?</h3>
             <p>Fully open-source. Fine-tune the model yourself or use BART zero-shot until you have a GPU.</p>
             <a
-              href="https:
+              href="https://github.com/Dhanvin1520/meetingmind-ai"
               target="_blank"
               rel="noreferrer"
               className="btn-primary"
