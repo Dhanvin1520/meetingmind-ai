@@ -23,7 +23,7 @@ export default function Navbar() {
         </ul>
         <div className="navbar__right">
           <a
-            href="https:
+            href="https://github.com/Dhanvin1520/meetingmind-ai"
             target="_blank"
             rel="noreferrer"
             className="btn-outline"

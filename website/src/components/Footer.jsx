@@ -21,16 +21,16 @@ export default function Footer() {
           </div>
           <div className="footer__col">
             <div className="col-title">Tech</div>
-            <a href="https:
-            <a href="https:
-            <a href="https:
-            <a href="https:
+            <a href="https://react.dev">React</a>
+            <a href="https://threejs.org">Three.js</a>
+            <a href="https://vitejs.dev">Vite</a>
+            <a href="https://pytorch.org">PyTorch</a>
           </div>
           <div className="footer__col">
             <div className="col-title">Links</div>
-            <a href="https:
-            <a href="https:
-            <a href="https:
+            <a href="https://github.com/Dhanvin1520/meetingmind-ai">GitHub</a>
+            <a href="https://linkedin.com">LinkedIn</a>
+            <a href="https://twitter.com">Twitter</a>
           </div>
         </div>
       </div>
