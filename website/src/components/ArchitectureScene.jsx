@@ -4,14 +4,14 @@ import { Line, Text, Billboard, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import './ArchitectureScene.css';
 const NODES = [
-  { id: 'meet',       label: 'Google Meet',     sub: 'meet.google.com',    pos: [-4, 1, 0],  color: '#4285f4', emoji: '🎙️' },
-  { id: 'speech',     label: 'Web Speech API',  sub: 'Chrome Built-in ASR', pos: [-1.5, 2.5, 0], color: '#bb86fc', emoji: '🔊' },
-  { id: 'content',    label: 'Content Script',  sub: 'content.js MV3',     pos: [-1.5, -0.5, 0], color: '#bb86fc', emoji: '🧩' },
-  { id: 'bg',         label: 'Service Worker',  sub: 'background.js',       pos: [1.5, 1, 0],  color: '#ce9dfd', emoji: '⚙️' },
-  { id: 'fastapi',    label: 'FastAPI',          sub: 'localhost:8000',      pos: [4, 2, 0],   color: '#009688', emoji: '⚡' },
-  { id: 'mongo',      label: 'MongoDB',          sub: 'Transcripts + Sessions',pos: [4, -0.5, 0], color: '#4caf50', emoji: '🍃' },
-  { id: 'bart',       label: 'BART Model',       sub: 'Fine-tuned on AMI', pos: [7, 1, 0],   color: '#f59e0b', emoji: '🤖' },
-  { id: 'output',     label: 'Structured Output',sub: 'TL;DR · Actions · Decisions', pos: [10, 1, 0], color: '#03dac6', emoji: '✨' },
+  { id: 'meet',       label: 'Google Meet',     sub: 'meet.google.com',    pos: [-4, 1, 0],  color: '#2563eb' },
+  { id: 'speech',     label: 'Web Speech API',  sub: 'Chrome Built-in ASR', pos: [-1.5, 2.5, 0], color: '#6366f1' },
+  { id: 'content',    label: 'Content Script',  sub: 'content.js MV3',     pos: [-1.5, -0.5, 0], color: '#6366f1' },
+  { id: 'bg',         label: 'Service Worker',  sub: 'background.js',       pos: [1.5, 1, 0],  color: '#8b5cf6' },
+  { id: 'fastapi',    label: 'FastAPI',          sub: 'localhost:8000',      pos: [4, 2, 0],   color: '#0ea5e9' },
+  { id: 'mongo',      label: 'MongoDB',          sub: 'Transcripts + Sessions',pos: [4, -0.5, 0], color: '#10b981' },
+  { id: 'bart',       label: 'BART Model',       sub: 'Fine-tuned on AMI', pos: [7, 1, 0],   color: '#f59e0b' },
+  { id: 'output',     label: 'Structured Output',sub: 'TL;DR · Actions · Decisions', pos: [10, 1, 0], color: '#0ea5e9' },
 ];
 const EDGES = [
   ['meet', 'speech'],
@@ -60,17 +60,16 @@ function Node({ node, hovered, onHover }) {
         <Text
           position={[0, 0.65, 0]}
           fontSize={0.22}
-          color="#f0f0ff"
+          color="#0f172a"
           anchorX="center"
           anchorY="middle"
-          font="https:
         >
-          {node.emoji} {node.label}
+          {node.label}
         </Text>
         <Text
           position={[0, 0.38, 0]}
           fontSize={0.14}
-          color="#a0a0b4"
+          color="#475569"
           anchorX="center"
           anchorY="middle"
         >
@@ -97,7 +96,7 @@ function Edge({ from, to }) {
     <>
       <Line
         points={[start, end]}
-        color="#2a2a44"
+        color="#cbd5e1"
         lineWidth={2}
         dashed={false}
       />
@@ -129,8 +128,8 @@ export default function ArchitectureScene() {
     <section className="section arch" id="architecture">
       <div className="container">
         <div className="section-center">
-          <div className="section-label">🌐 Live Architecture</div>
-          <h2 className="section-title">How the <span className="gradient-text">entire system talks.</span></h2>
+          <div className="section-label">Live Architecture</div>
+          <h2 className="section-title">How the entire system talks.</h2>
           <p className="section-sub">An interactive 3D map of every component — from your microphone to your structured meeting summary.</p>
         </div>
       </div>
@@ -140,9 +139,9 @@ export default function ArchitectureScene() {
           style={{ background: 'transparent' }}
           gl={{ antialias: true, alpha: true }}
         >
-          <ambientLight intensity={0.4} />
-          <pointLight position={[0, 5, 5]} intensity={1.2} color="#bb86fc" />
-          <pointLight position={[10, 5, 5]} intensity={0.8} color="#03dac6" />
+          <ambientLight intensity={1.2} />
+          <pointLight position={[0, 5, 5]} intensity={0.5} color="#2563eb" />
+          <pointLight position={[10, 5, 5]} intensity={0.5} color="#0ea5e9" />
           {EDGES.map(([from, to], i) => (
             <Edge key={i} from={from} to={to} />
           ))}
