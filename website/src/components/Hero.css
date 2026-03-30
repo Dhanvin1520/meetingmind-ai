@@ -89,12 +89,12 @@
   border-radius: 14px;
   overflow: hidden;
   border: 1px solid var(--border);
-  background: #0a0a14;
+  background: var(--bg);
   box-shadow: var(--shadow-glow), var(--shadow-card);
   animation: float 4s ease-in-out infinite;
 }
 .browser-top {
-  background: #111120;
+  background: var(--bg-2);
   padding: 11px 16px;
   display: flex;
   align-items: center;
@@ -118,7 +118,7 @@
 }
 .browser-body { position: relative; }
 .meet-bg {
-  background: #0c0c1a;
+  background: var(--bg-3);
   padding: 16px;
 }
 .meet-grid {
@@ -127,7 +127,7 @@
   gap: 8px;
 }
 .meet-tile {
-  background: #14142a;
+  background: var(--bg);
   border-radius: 10px;
   padding: 20px;
   display: flex;
@@ -140,12 +140,12 @@
   aspect-ratio: 16/9;
   justify-content: center;
 }
-.you-tile { border-color: rgba(187,134,252,0.3); }
+.you-tile { border-color: var(--accent); }
 .avatar {
   width: 38px; height: 38px;
   border-radius: 50%;
   background: var(--accent);
-  color: #000;
+  color: #fff;
   display: flex; align-items: center; justify-content: center;
   font-weight: 700; font-size: 1rem;
 }
@@ -153,11 +153,11 @@
   position: absolute;
   top: 10px; right: 10px;
   width: 220px;
-  background: #121220;
+  background: var(--bg);
   border: 1px solid var(--border-bright);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+  box-shadow: var(--shadow-card);
   font-size: 0.78rem;
 }
 .ext-header {
@@ -165,7 +165,7 @@
   align-items: center;
   gap: 7px;
   padding: 10px 12px;
-  background: #0e0e1c;
+  background: var(--bg-2);
   border-bottom: 1px solid var(--border);
   font-weight: 600;
   font-size: 0.82rem;
@@ -175,7 +175,7 @@
   width: 22px; height: 22px;
   border-radius: 6px;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #000; font-weight: 800; font-size: 0.75rem;
+  color: #fff; font-weight: 800; font-size: 0.75rem;
   display: flex; align-items: center; justify-content: center;
 }
 .rec-badge {
@@ -212,7 +212,7 @@
   padding: 8px;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   border: none; border-radius: 8px;
-  font-weight: 700; font-size: 0.78rem; color: #000;
+  font-weight: 700; font-size: 0.78rem; color: #fff;
   cursor: pointer;
 }
 .floating-summary {
@@ -221,7 +221,7 @@
   left: -32px;
   padding: 16px 18px;
   min-width: 240px;
-  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+  box-shadow: var(--shadow-card);
   animation: float 5s ease-in-out 1s infinite;
 }
 .fs-tag {

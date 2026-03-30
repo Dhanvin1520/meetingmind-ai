@@ -11,10 +11,6 @@ export default function Hero() {
   }, []);
   return (
     <section className="hero">
-      {}
-      <div className="hero__orb hero__orb--1" />
-      <div className="hero__orb hero__orb--2" />
-      <div className="hero__orb hero__orb--3" />
       <div className="container hero__layout">
         {}
         <div className="hero__text">
@@ -24,7 +20,7 @@ export default function Hero() {
           </div>
           <h1 className="hero__headline fade-up delay-1">
             Your meetings,<br />
-            <span className="gradient-text">summarised by AI</span><br />
+            <span>summarised by AI</span><br />
             you own.
           </h1>
           <p className="hero__sub fade-up delay-2">
