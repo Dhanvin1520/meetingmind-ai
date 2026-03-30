@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+*.so
+.venv/
+venv/
+env/
+pip-log.txt
+
+# ML checkpoints & datasets
+ml/checkpoints/
+ml/data/
+ml/*.ckpt
+*.safetensors
+
+# Backend
+backend/.env
+backend/__pycache__/
+backend/*.db
+
+# Node / Extension popup
+extension/popup/node_modules/
+extension/popup/dist/
+
+# Secrets & envs
+.env
+.env.local
+*.env
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+.code_backup/
