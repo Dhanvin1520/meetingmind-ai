@@ -3,6 +3,7 @@ FROM python:3.11-slim
 # Create a non-root user (HuggingFace Spaces requirement)
 RUN useradd -m -u 1000 user
 USER user
+# Set up user home directory and variables
 ENV HOME=/home/user \
     PATH=/home/user/.local/bin:$PATH
 
