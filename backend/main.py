@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.database import settings, connect_db, close_db
 from backend.model import SummarisationModel
 from backend.routes import session, transcript, summary
+# Configure standard logging format for the API
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(name)s — %(message)s')
 logger = logging.getLogger(__name__)
 
