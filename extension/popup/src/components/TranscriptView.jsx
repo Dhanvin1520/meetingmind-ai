@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 export default function TranscriptView({ text }) {
   const containerRef = useRef(null);
+  // Auto-scroll to the bottom when new text arrives
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
