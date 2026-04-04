@@ -1,4 +1,5 @@
 import './Footer.css';
+// Main footer component for the website
 export default function Footer() {
   return (
     <footer className="footer">
