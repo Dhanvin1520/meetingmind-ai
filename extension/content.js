@@ -121,15 +121,25 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({ status: "already_stopped" });
       return;
     }
+    
+    let finalChunk = null;
     if (currentChunkText.trim()) {
-      sendChunkToBackground();
+      const now = Date.now();
+      finalChunk = {
+        chunk_index: chunkIndex,
+        text: currentChunkText.trim(),
+        timestamp_start: (chunkStartTime - sessionStartTime) / 1000,
+        timestamp_end: (now - sessionStartTime) / 1000
+      };
+      
     }
+    
     isRecording = false;
     if (chunkTimer) clearInterval(chunkTimer);
     if (recognition) {
       try { recognition.stop(); } catch(e) {}
     }
-    sendResponse({ status: "stopped" });
+    sendResponse({ status: "stopped", finalChunk });
   }
   return true; 
 });
