@@ -3,7 +3,7 @@ import { useState } from 'react';
 export default function SummaryView({ summary }) {
   const [copied, setCopied] = useState(false);
   if (!summary) return null;
-  // Helper to generate a clean markdown string from the summary object
+  
   const generateMarkdown = () => {
     let md = `# Meeting: ${summary.meeting_title || 'Meeting Summary'}\n`;
     md += `*Generated: ${new Date(summary.generated_at).toLocaleString()}*\n\n`;
