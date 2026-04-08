@@ -1,7 +1,9 @@
+import os
 import logging
 from datetime import datetime, timezone
 from typing import Optional
 import motor.motor_asyncio
+import certifi
 from bson import ObjectId
 from pydantic_settings import BaseSettings
 logger = logging.getLogger(__name__)
@@ -9,13 +11,20 @@ logger = logging.getLogger(__name__)
 class Settings(BaseSettings):
     mongo_uri: str = 'mongodb://localhost:27017'
     mongo_db_name: str = 'meetingmind'
-    model_checkpoint: str = './checkpoints/bart-meeting/final'
+    model_checkpoint: str = 'facebook/bart-large-cnn'
     allowed_origins: str = 'http://localhost:5173,chrome-extension://'
     host: str = '0.0.0.0'
     port: int = 8000
 
     class Config:
-        env_file = '.env'
+        env_file = os.path.join(os.path.dirname(__file__), '.env')
+        env_file_encoding = 'utf-8'
+        case_sensitive = False
+        extra = 'ignore'
+
+    @classmethod
+    def settings_customise_sources(cls, settings_cls, init_settings, env_settings, dotenv_settings, file_secret_settings):
+        return (init_settings, env_settings, dotenv_settings)
 settings = Settings()
 _client: Optional[motor.motor_asyncio.AsyncIOMotorClient] = None
 _db: Optional[motor.motor_asyncio.AsyncIOMotorDatabase] = None
@@ -23,7 +32,7 @@ _db: Optional[motor.motor_asyncio.AsyncIOMotorDatabase] = None
 async def connect_db():
     global _client, _db
     logger.info(f'Connecting to MongoDB: {settings.mongo_uri}')
-    _client = motor.motor_asyncio.AsyncIOMotorClient(settings.mongo_uri)
+    _client = motor.motor_asyncio.AsyncIOMotorClient(settings.mongo_uri, tlsCAFile=certifi.where())
     _db = _client[settings.mongo_db_name]
     await _db.sessions.create_index('session_id', unique=True)
     await _db.transcripts.create_index('session_id')
