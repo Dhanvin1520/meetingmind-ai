@@ -1,6 +1,22 @@
-const API_BASE = "http:
-let currentSessionId = null;
+let API_BASE = "http://127.0.0.1:8000";
+let currentSessionId = null;  
 let isRecording = false;
+
+
+chrome.storage.sync.get(['apiUrl']).then((data) => {
+  if (data.apiUrl) {
+    API_BASE = data.apiUrl.replace(/\/$/, ""); 
+    console.log("MeetingMind: API_BASE set to", API_BASE);
+  }
+});
+
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'sync' && changes.apiUrl) {
+    API_BASE = changes.apiUrl.newValue.replace(/\/$/, "");
+    console.log("MeetingMind: API_BASE updated to", API_BASE);
+  }
+});
 chrome.runtime.onInstalled.addListener(() => {
   console.log("MeetingMind Background Worker Installed");
   chrome.storage.session.set({
@@ -9,10 +25,30 @@ chrome.runtime.onInstalled.addListener(() => {
     summary: null
   });
 });
+
+async function restoreState() {
+  try {
+    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.session) {
+      const data = await chrome.storage.session.get(['sessionId', 'isRecording']);
+      if (data.sessionId) currentSessionId = data.sessionId;
+      if (data.isRecording !== undefined) isRecording = data.isRecording;
+      console.log("MeetingMind: State restored", { currentSessionId, isRecording });
+    }
+  } catch (err) {
+    console.error("MeetingMind: Failed to restore state", err);
+  }
+}
+
+
+restoreState();
+
 function updateState(updates) {
   if (updates.sessionId !== undefined) currentSessionId = updates.sessionId;
   if (updates.isRecording !== undefined) isRecording = updates.isRecording;
-  chrome.storage.session.set(updates);
+  
+  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.session) {
+    chrome.storage.session.set(updates);
+  }
 }
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "START_MEETING") {
@@ -85,16 +121,31 @@ async function handleTranscriptChunk(chunkPayload) {
 async function handleStopMeeting() {
   if (!currentSessionId) return { success: false, error: "No active session" };
   const sid = currentSessionId;
+  
+  
+  const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (tabs.length > 0) {
+    try {
+      const response = await chrome.tabs.sendMessage(tabs[0].id, { type: "STOP_RECORDING" });
+      if (response && response.finalChunk) {
+        console.log("MeetingMind: Handling final chunk from content script", response.finalChunk);
+        await handleTranscriptChunk(response.finalChunk);
+      }
+    } catch (err) {
+      console.warn("MeetingMind: Content script stop failed or timed out", err);
+    }
+  }
+
   updateState({
     isRecording: false,
     liveTranscript: "" 
   });
-  const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-  if (tabs.length > 0) {
-    chrome.tabs.sendMessage(tabs[0].id, { type: "STOP_RECORDING" });
-  }
+
   try {
+    
     await fetch(`${API_BASE}/session/${sid}/stop`, { method: "POST" });
+    
+    
     const res = await fetch(`${API_BASE}/summary/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Google Meet - MeetingMind Demo</title>
+    <style>
+        body { font-family: 'Google Sans', Roboto, Arial, sans-serif; background-color: #202124; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .container { text-align: center; border: 1px solid #3c4043; padding: 40px; border-radius: 8px; width: 600px; }
+        h1 { color: #8ab4f8; }
+        .controls { margin-top: 20px; }
+        button { background-color: #8ab4f8; color: #202124; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; margin: 5px; }
+        button:hover { background-color: #aecbfa; }
+        #log { margin-top: 20px; text-align: left; background: #3c4043; padding: 10px; border-radius: 4px; height: 150px; overflow-y: auto; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Google Meet (Simulation)</h1>
+        <p>This page is used to test the MeetingMind extension without a real meeting.</p>
+        
+        <div class="controls">
+            <button id="mock-speech">Feed Mock Speech Chunk</button>
+            <button id="clear-log">Clear Log</button>
+        </div>
+
+        <div id="log">--- System Logs ---<br></div>
+    </div>
+
+    <script>
+        const log = (msg) => {
+            const el = document.getElementById('log');
+            el.innerHTML += `> ${msg}<br>`;
+            el.scrollTop = el.scrollHeight;
+        };
+
+        const demoChunks = [
+            "Welcome everyone to the MeetingMind project sync. Today we're reviewing the BART summarization model integration.",
+            "I've verified the MongoDB connection in the backend and it's working fine. We are now testing the Chrome extension flows.",
+            "One key decision made is to use a 30-second chunking strategy for real-time transcription to keep latency low.",
+            "Next steps: Dhanvin will finalize the UI of the popup and then we can prepare for the final deployment."
+        ];
+        let currentChunk = 0;
+        let currentRecInstance = null;
+
+        // PROPER MOCKING OF WEB SPEECH API
+        window.webkitSpeechRecognition = function() {
+            this.continuous = true;
+            this.interimResults = true;
+            this.start = () => { 
+                log("Speech Recognition: Started (Simulation)");
+                currentRecInstance = this;
+                if(this.onstart) this.onstart(); 
+            };
+            this.stop = () => { 
+                log("Speech Recognition: Stopped");
+                currentRecInstance = null;
+                if(this.onend) this.onend(); 
+            };
+        };
+
+        document.getElementById('mock-speech').onclick = () => {
+            if (currentChunk >= demoChunks.length) {
+                log("No more demo chunks available.");
+                return;
+            }
+            if (!currentRecInstance) {
+                log("ERROR: Extension must be 'Recording' to hear mock speech.");
+                return;
+            }
+            const text = demoChunks[currentChunk++];
+            log(`Speaking: "${text}"`);
+
+            // Simulate the onresult event that content.js expects
+            const event = {
+                resultIndex: 0,
+                results: [{
+                    isFinal: true,
+                    0: { transcript: text }
+                }]
+            };
+            if (currentRecInstance.onresult) {
+                currentRecInstance.onresult(event);
+            }
+        };
+
+        document.getElementById('clear-log').onclick = () => {
+            document.getElementById('log').innerHTML = "--- Logs Cleared ---<br>";
+        };
+
+        log("Mock Meet ready. Load the extension and click Start Recording.");
+    </script>
+</body>
+</html>

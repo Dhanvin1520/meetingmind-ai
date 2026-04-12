@@ -1,4 +1,4 @@
-/* Main grid layout for the features section */
+
 .features__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

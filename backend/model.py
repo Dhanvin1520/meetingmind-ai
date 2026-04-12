@@ -4,8 +4,6 @@ from typing import Optional
 import torch
 from transformers import pipeline
 logger = logging.getLogger(__name__)
-
-# Regex patterns for extracting action items from text
 _ACTION_PATTERNS = ['(?P<owner>[A-Z][a-z]+(?:\\s[A-Z][a-z]+)?)\\s+will\\s+(?P<desc>[^.!?]+)[.!?]', '(?:ACTION|Action item)[:\\-–]\\s*(?P<owner>[A-Z][a-z]+)?\\s*[:\\-–]?\\s*(?P<desc>[^.!?\\n]+)', '[-•]\\s*(?P<desc>[^().\\n]+)\\s*\\((?P<owner>[A-Z][a-z]+)\\)']
 _DECISION_PATTERNS = ['(?:decided|agreed|resolved|concluded)\\s+(?:to\\s+)?(?P<dec>[^.!?\\n]+)[.!?]', '(?:DECISION|Decision)[:\\-–]\\s*(?P<dec>[^.!?\\n]+)']
 

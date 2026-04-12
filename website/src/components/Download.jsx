@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import './Download.css';
 const STEPS = [
-  { label: 'Clone the repo', code: 'git clone https://github.com/Dhanvin1520/meetingmind-ai.git' },
+  { label: 'Clone the repo', code: 'git clone https://github.com/Dhanvin1520/meetingmind-ai.git \\ncd meetingmind-ai' },
   { label: 'Build the popup', code: 'cd extension/popup && npm install && npm run build' },
   { label: 'Open Chrome extensions', code: 'chrome://extensions/' },
-  { label: 'Load the extension', code: 'Click "Load unpacked" → Select meetingmind/extension/' },
+  { label: 'Load the extension', code: 'Click "Load unpacked" → Select meetingmind-ai/extension/' },
 ];
 export default function Download() {
   const [copied, setCopied] = useState(null);

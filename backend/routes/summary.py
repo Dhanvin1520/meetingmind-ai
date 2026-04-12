@@ -8,7 +8,6 @@ logger = logging.getLogger(__name__)
 
 @router.post('/generate', response_model=SummaryResponse)
 async def generate_summary(body: SummaryRequest, request: Request):
-    """Generate a structured meeting summary from the full session transcript."""
     session = await get_session(body.session_id)
     if not session:
         raise HTTPException(status_code=404, detail='Session not found')
