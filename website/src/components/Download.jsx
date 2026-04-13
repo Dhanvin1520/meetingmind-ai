@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import './Download.css';
 const STEPS = [
-  { label: 'Clone the repo', code: 'git clone https://github.com/Dhanvin1520/meetingmind-ai.git \\ncd meetingmind-ai' },
+  { label: 'Clone the repo', code: 'git clone https://github.com/Dhanvin1520/meetingmind-ai.git && cd meetingmind-ai' },
   { label: 'Build the popup', code: 'cd extension/popup && npm install && npm run build' },
   { label: 'Open Chrome extensions', code: 'chrome://extensions/' },
   { label: 'Load the extension', code: 'Click "Load unpacked" → Select meetingmind-ai/extension/' },
+  { label: 'Install backend dependencies', code: 'cd backend && python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt' },
+  { label: 'Start the AI server', code: 'cd .. && python3 start_meetingmind.py' },
 ];
 export default function Download() {
   const [copied, setCopied] = useState(null);
@@ -18,7 +20,7 @@ export default function Download() {
       <div className="container">
         <div className="section-center">
           <div className="section-label">Free & Open Source</div>
-          <h2 className="section-title">Get MeetingMind in 4 steps.</h2>
+          <h2 className="section-title">Get MeetingMind in 6 steps.</h2>
           <p className="section-sub">No account. No subscription. No data leaving your infrastructure. Just a better meeting experience.</p>
         </div>
         <div className="download__layout">
