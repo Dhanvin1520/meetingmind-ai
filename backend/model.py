@@ -2,7 +2,7 @@ import logging
 import re
 from typing import Optional
 import torch
-from transformers import pipeline
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 logger = logging.getLogger(__name__)
 _ACTION_PATTERNS = ['(?P<owner>[A-Z][a-z]+(?:\\s[A-Z][a-z]+)?)\\s+will\\s+(?P<desc>[^.!?]+)[.!?]', '(?:ACTION|Action item)[:\\-–]\\s*(?P<owner>[A-Z][a-z]+)?\\s*[:\\-–]?\\s*(?P<desc>[^.!?\\n]+)', '[-•]\\s*(?P<desc>[^().\\n]+)\\s*\\((?P<owner>[A-Z][a-z]+)\\)']
 _DECISION_PATTERNS = ['(?:decided|agreed|resolved|concluded)\\s+(?:to\\s+)?(?P<dec>[^.!?\\n]+)[.!?]', '(?:DECISION|Decision)[:\\-–]\\s*(?P<dec>[^.!?\\n]+)']
@@ -23,9 +23,10 @@ class SummarisationModel:
 
     def _load(self):
         logger.info(f'Loading model from: {self.checkpoint_path}')
-        device = 0 if torch.cuda.is_available() else -1
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         dtype = torch.float16 if torch.cuda.is_available() else torch.float32
-        self._pipe = pipeline('summarization', model=self.checkpoint_path, tokenizer=self.checkpoint_path, device=device, torch_dtype=dtype, framework='pt')
+        self.tokenizer = AutoTokenizer.from_pretrained(self.checkpoint_path)
+        self.model = AutoModelForSeq2SeqLM.from_pretrained(self.checkpoint_path, torch_dtype=dtype).to(self.device)
         logger.info('Model loaded successfully.')
 
     def _generate_raw_summary(self, transcript: str) -> str:
@@ -34,8 +35,9 @@ class SummarisationModel:
             logger.warning(f'Transcript too long ({len(words)} words). Chunking to last 750 words for summary generation.')
             words = words[-750:]
         truncated = ' '.join(words)
-        out = self._pipe(truncated, max_length=256, min_length=80, do_sample=False, no_repeat_ngram_size=3, early_stopping=True, length_penalty=2.0)
-        return out[0]['summary_text']
+        inputs = self.tokenizer([truncated], max_length=1024, return_tensors='pt', truncation=True).to(self.device)
+        summary_ids = self.model.generate(inputs['input_ids'], max_length=256, min_length=80, num_beams=4, early_stopping=True, no_repeat_ngram_size=3, length_penalty=2.0)
+        return self.tokenizer.decode(summary_ids[0], skip_special_tokens=True)
 
     @staticmethod
     def _extract_tldr(summary: str) -> str:
