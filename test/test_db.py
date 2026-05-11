@@ -1,5 +1,5 @@
 import asyncio
-from database import connect_db, close_db, get_db
+from backend.database import connect_db, close_db, get_db
 
 async def main():
     try:
