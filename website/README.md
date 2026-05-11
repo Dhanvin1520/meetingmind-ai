@@ -1,16 +1,31 @@
-# React + Vite
+# MeetingMind Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The professional landing page for MeetingMind AI. Built with React, Vite, and GSAP for high-performance animations and a premium SaaS aesthetic.
 
-Currently, two official plugins are available:
+## Tech Stack
+- **Framework**: React 18
+- **Build Tool**: Vite
+- **Styling**: Vanilla CSS (Modern Design System)
+- **Animations**: GSAP & React Three Fiber (Architecture Scene)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Getting Started
 
-## React Compiler
+1.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+2.  **Run development server**:
+    ```bash
+    npm run dev
+    ```
 
-## Expanding the ESLint configuration
+3.  **Build for production**:
+    ```bash
+    npm run build
+    ```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Project Structure
+- `/src/components`: Reusable UI components (Hero, Features, Architecture, etc.)
+- `/src/assets`: Images, icons, and static vectors
+- `/public`: Favicons and global SVG sprites
