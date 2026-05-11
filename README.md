@@ -1,80 +1,107 @@
-# MeetingMind
+# MeetingMind AI
 
-A Chrome Extension and FastAPI backend that captures live Google Meet audio, transcribes it in real-time using the native browser Web Speech API, and generates structured meeting summaries using a **self-hosted, fine-tuned BART model**.
+[Live Demo](https://meetingmind-ai-qw6i.vercel.app/)
 
-> **No external API calls to OpenAI or Groq.** The summarisation is 100% self-hosted.
+MeetingMind AI is an advanced, privacy-centric meeting assistant designed to automate the capture, transcription, and summarization of Google Meet sessions. By leveraging a self-hosted, fine-tuned BART model, MeetingMind AI ensures that sensitive meeting data remains within a controlled environment, eliminating reliance on third-party Large Language Model (LLM) APIs.
 
----
+## Core Capabilities
 
-## 1. Project Structure
+- **Real-time Transcription**: Seamlessly captures audio streams directly from Google Meet using the Web Speech API.
+- **Local AI Summarization**: Generates structured summaries, including actionable insights and key decisions, using a locally hosted machine learning pipeline.
+- **Privacy-First Architecture**: All data processing and summarization are performed on-device or on self-hosted infrastructure.
+- **Chrome Extension Integration**: A Manifest V3-compliant extension provides an intuitive interface for managing sessions within the browser.
+- **Advanced Dashboard**: A high-performance web interface built with React and Three.js for comprehensive management of meeting records.
 
-- `ml/`: Scripts to fine-tune `facebook/bart-large-cnn` on the AMI Meeting Corpus.
-- `backend/`: FastAPI server that loads the fine-tuned model and provides REST endpoints for the extension.
-- `extension/`: Manifest V3 Chrome Extension containing the content script (audio capture), background worker (state sync), and a React popup UI.
+## Why MeetingMind?
 
----
+MeetingMind addresses the critical gap between productivity and data privacy. While conventional meeting assistants rely on external cloud providers, MeetingMind offers:
 
-## 2. ML Fine-Tuning
+- **Zero Data Leakage**: Your conversations never leave your infrastructure.
+- **High Performance**: Optimized BART model provides near-instant summaries.
+- **Seamless Workflow**: Integrated directly into the Google Meet experience.
+- **Customizable ML**: The fine-tuned BART model is specifically optimized for multi-speaker dialogue.
 
-Wait! You don't have to fine-tune if you just want to run the app right away, but to get the best meeting-specific results, you should fine-tune the model.
+## Technical Architecture
 
-**Requirements**: A GPU with at least 16GB VRAM is highly recommended.
+The system is composed of three primary layers, orchestrated to provide a seamless flow from audio capture to AI-driven insights:
 
-1. `cd ml`
-2. Configure a python virtual environment and `pip install -r requirements.txt`
-3. Run the fine-tuning script:
+```mermaid
+graph TD
+    subgraph Client_Environment [Client Environment]
+        A[Google Meet Interface] -->|Audio Capture| B[Chrome Extension]
+        E[React Dashboard] <-->|Rest API| C[FastAPI Backend]
+    end
+
+    subgraph Server_Infrastructure [Server Infrastructure]
+        B -->|WebSocket/Post| C
+        C -->|Inference Request| D[BART ML Engine]
+        D -->|Generated Summary| C
+        C <-->|Data Storage| F[(MongoDB)]
+    end
+```
+
+1.  **Frontend (Dashboard)**: A sophisticated web application utilizing Vite, React, and GSAP for fluid interactions, with Three.js for data visualization components.
+2.  **Backend (API & Inference)**: A FastAPI-based service that handles session management, database interactions with MongoDB, and coordinates the ML inference engine.
+3.  **Chrome Extension**: A secure browser utility that serves as the bridge between the Google Meet interface and the backend services.
+
+## Technology Stack
+
+- **Frontend**: React, Vite, Three.js, React Three Fiber, GSAP.
+- **Backend**: Python, FastAPI, MongoDB.
+- **Machine Learning**: PyTorch, Hugging Face Transformers (BART-Large-CNN).
+- **Extension**: JavaScript (Manifest V3).
+
+## Installation and Deployment
+
+### 1. Backend Configuration
+
+The backend requires Python 3.9+ and a running MongoDB instance.
+
+```bash
+cd backend
+python -m venv venv
+source venv/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env
+# Configure environment variables in .env
+uvicorn main:app --reload --port 8000
+```
+
+### 2. Chrome Extension Setup
+
+1. Build the extension popup:
    ```bash
-   python fine_tune.py \
-       --model_name facebook/bart-large-cnn \
-       --output_dir ../checkpoints/bart-meeting/final \
-       --num_train_epochs 5 \
-       --batch_size 4
+   cd extension/popup
+   npm install
+   npm run build
    ```
-4. Evaluate your fine-tuned model against the zero-shot baseline:
-   ```bash
-   python evaluate.py --checkpoint ../checkpoints/bart-meeting/final
-   ```
+2. Load the extension in Chrome:
+   - Navigate to `chrome://extensions/`.
+   - Enable Developer Mode.
+   - Select "Load unpacked" and choose the `extension/` directory.
+
+### 3. Dashboard Deployment
+
+```bash
+cd website
+npm install
+npm run dev
+```
+
+## Machine Learning Pipeline
+
+The summarization engine utilizes a fine-tuned version of `facebook/bart-large-cnn`. The model was trained on meeting-specific dialogue datasets to optimize for multi-speaker coherence and context retention.
+
+To execute the fine-tuning script:
+```bash
+cd ml
+python fine_tune.py --model_name facebook/bart-large-cnn --output_dir ../checkpoints/bart-meeting/final
+```
+
+## License
+
+This project is licensed under the MIT License.
 
 ---
 
-## 3. Backend Setup
-
-The backend handles session state via MongoDB and runs the BART inference.
-
-1. **Install MongoDB**: Ensure you have MongoDB running locally on port 27017.
-2. `cd backend`
-3. Install dependencies: `pip install -r requirements.txt`
-4. Copy environment variables: `cp .env.example .env`
-5. Edit `.env` to ensure `MODEL_CHECKPOINT` points to your fine-tuned model (or just `facebook/bart-large-cnn` if you skipped fine-tuning).
-6. Start the server:
-   ```bash
-   uvicorn main:app --reload --port 8000
-   ```
-
----
-
-## 4. Chrome Extension Setup
-
-The extension injects into `meet.google.com` to capture audio.
-
-1. `cd extension/popup`
-2. Install UI dependencies: `npm install`
-3. Build the UI: `npm run build`
-4. Open Chrome and go to `chrome://extensions/`
-5. Enable **Developer Mode** in the top right.
-6. Click **Load unpacked** and select the `meetingmind/extension/` directory.
-
----
-
-## 5. Usage Guide
-
-1. Keep the FastAPI backend (`uvicorn`) running in your terminal.
-2. Join a **Google Meet** call.
-3. Click the MeetingMind extension icon in your Chrome toolbar.
-4. Enter a Meeting Title and basic Participants (comma-separated).
-5. Click **Start Recording**.
-   - Note: Chrome may prompt you to allow microphone access.
-6. The popup will display a live rolling transcript.
-7. When the meeting ends, click **Stop & Summarise**.
-8. The backend will process the full transcript using the fine-tuned BART model.
-9. You will see a structured summary (TL;DR, Action Items, Key Decisions) that you can copy to Markdown!
+Developed by [Dhanvin](https://github.com/Dhanvin1520).

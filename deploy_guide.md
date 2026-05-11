@@ -19,7 +19,7 @@ Render is the easiest way to host this Dockerized FastAPI backend.
 6.  **Update Extension**:
     - Once deployed, Render will give you a URL (e.g., `https://meetingmind-api.onrender.com`).
     - Open the MeetingMind extension popup.
-    - Click the **Settings (⚙️)** icon.
+    - Click the **Settings** icon.
     - Paste your Render URL into the **API URL** field and click **Save**.
 
 ## Alternative: Hugging Face Spaces
