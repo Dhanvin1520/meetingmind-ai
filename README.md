@@ -1,6 +1,6 @@
 # MeetingMind AI
 
-[Live Demo](https://meetingmind-ai-qw6i.vercel.app/)
+[Live App](https://meetingmind-ai-rf92.vercel.app/)
 
 MeetingMind AI is an advanced, privacy-centric meeting assistant designed to automate the capture, transcription, and summarization of Google Meet sessions. By leveraging a self-hosted, fine-tuned BART model, MeetingMind AI ensures that sensitive meeting data remains within a controlled environment, eliminating reliance on third-party Large Language Model (LLM) APIs.
 
